@@ -1,0 +1,55 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Verify",
+            "type": "shell",
+            "isBackground": true,
+            "problemMatcher": [],
+            "linux": {
+                "command": "echo \"Executable Path : ${command:cmake.launchTargetPath}\"",
+                "options": {
+                    "cwd": "${workspaceRoot}"
+                    }
+            },
+            "osx": {
+                "command": "echo \"Executable Path : ${command:cmake.launchTargetPath}\"",
+                "options": {
+                    "cwd": "${workspaceRoot}"
+                    }
+            },
+            "windows": {
+                "command": "echo \"Executable Path : ${command:cmake.launchTargetPath}\"",
+                "options": {
+                    "cwd": "${workspaceRoot}"
+                    }
+            }
+        },
+        {
+            "label": "Upload",
+            "type": "shell",
+            "isBackground": true,
+            "problemMatcher": [],
+            "linux": {
+                "command": "openocd -f board/mbed-lpc1768.cfg -c \"adapter speed 4000;program {${command:cmake.launchTargetPath}} reset\" -c shutdown",
+                "options": {
+                    "cwd": "${workspaceRoot}"
+                    }
+            },
+            "osx": {
+                "command": "openocd -f board/mbed-lpc1768.cfg -c \"adapter speed 4000;program {${command:cmake.launchTargetPath}} reset\" -c shutdown",
+                "options": {
+                    "cwd": "${workspaceRoot}"
+                    }
+            },
+            "windows": {
+                "command": "C:/OpenOCD/bin/openocd.exe -f board/mbed-lpc1768.cfg -c 'adapter speed 4000;program {${command:cmake.launchTargetPath}} reset' -c shutdown",
+                "options": {
+                    "cwd": "${workspaceRoot}"
+                    }
+            }
+        }
+    ]
+}
