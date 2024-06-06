@@ -116,6 +116,10 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if (compteur_croisements >= 2){
+        pi.stop();
+        while(true);
+    }
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
