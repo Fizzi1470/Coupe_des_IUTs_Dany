@@ -1,10 +1,10 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.2
-#define KP 0.35
-#define KD 0.25
+#define SPEED 0.3
+#define KP 0.4
+#define KD 0.3
 
-#define SEUIL_PRIORITE 20 //cm noooormalement
+#define SEUIL_PRIORITE 10 //cm noooormalement
 
 #define SEUIL_LIGNE_PERDUE 300
 #define SEUIL_DETECTION_VIRAGE 500
@@ -38,7 +38,7 @@ AnalogIn sensor_port(p17);
 #define LINE_LEFT (sensors[0] > SEUIL_DETECTION_VIRAGE && sensors[2] > SEUIL_DETECTION_VIRAGE)  
 
 float distance(){
-    float t = sensor_port.read();
+    float t = sensor_port.read() *3.3;
     return (13.07143 * t * t * t * t - 77.17951 * t * t * t + 162.49768 * t * t - 150.403 * t + 64.30365);
 }
 
@@ -55,6 +55,7 @@ void perpandicular_turn(bool dir = 1){ // 1 pour tourner vers la droite, 0 pour 
     pi.right_motor(-coef*0.3);
     wait_ms(210);
     pi.stop();
+    wait_ms(500);
 }
 void u_turn(bool dir = 1){ // fait faire demi tour 
     perpandicular_turn(dir);
@@ -70,6 +71,7 @@ void wait_button_press(){while(BTN);while(!BTN);} // attend un appui sur le bout
 int compteur_ligne_droite = 0;
 int compteur_ligne_gauche = 0;
 int compteur_croisements = 0;
+int compteur_fin_de_ligne = 0;
 
 float old_error = 0;
 
@@ -94,6 +96,8 @@ void loop(){ // appelé en boucle
 
 // fin suiveur de ligne 
 
+
+
     pi.locate(0,1);
     sprintf(message,"%.2f",distance());
     pi.print(message,strlen(message));    
@@ -101,9 +105,9 @@ void loop(){ // appelé en boucle
     pi.locate(0,0);
     sprintf(message,"%.1f %d",fabsf(error),sensors[2]);
     pi.print(message,strlen(message));
-    pi.locate(0,1);
-    sprintf(message,"%d %d %d",compteur_ligne_gauche,compteur_croisements,compteur_ligne_droite);
-    pi.print(message,strlen(message));
+    // pi.locate(0,1);
+    // sprintf(message,"%d %d %d",compteur_ligne_gauche,compteur_croisements,compteur_ligne_droite);
+    // pi.print(message,strlen(message));
 }
 
 void ligne_a_droite(void){ // ligne détectée à droite uniquement
@@ -116,13 +120,55 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if (compteur_croisements == 2)
+    {
+        perpandicular_turn(1);
+    }
+    if (compteur_croisements == 9)//9
+    {
+        perpandicular_turn(1);
+    }
+    if (compteur_croisements == 10)//10
+    {
+        perpandicular_turn(1);
+    }
+    if (compteur_croisements == 11)//11
+    {
+        perpandicular_turn(1);
+    }
+    if (compteur_croisements == 12)//12
+    {
+        perpandicular_turn(0);
+    }
 }
 
-void fin_de_ligne(void){ // sortie de piste détectée
-    u_turn();
+void fin_de_ligne(void){
+    compteur_fin_de_ligne++;
+    if(compteur_fin_de_ligne == 7)
+    {
+        pi.stop();
+        while(1);
+    } // sortie de piste détectée
+    // u_turn();
 }
 
 void priorite_a_droite(void){
+
+    pi.stop();
+    perpandicular_turn(0);
+    pi.left_motor(0.15);
+    pi.right_motor(0.15);
+    wait_ms(1000);
+    perpandicular_turn(1);
+    pi.left_motor(0.15);
+    pi.right_motor(0.15);
+    wait_ms(2000);
+    perpandicular_turn(1);
+    pi.left_motor(0.15);
+    pi.right_motor(0.15);
+    wait_ms(1000);
+    perpandicular_turn(0);
+
     
 }
 
@@ -132,13 +178,22 @@ void stopped(void){ // robot stoppé par le bouton
     compteur_croisements = 0;
 }
 
-// ======================= Main =======================//
+// ======================= Main =======================//.
 
 int main(){
     pc.printf("HAL init done, proceeding...\n");
     pi.reset(); 
-    wait_ms(400);
+    wait_ms(1000);
     
+    pi.cls();
+    pi.locate(0,0);
+    sprintf(message,"Calibrate");
+    pi.print(message,strlen(message));
+    
+    wait_button_press();
+
+    pi.sensor_auto_calibrate();
+
     if (pi.battery() < 4.8){
         pi.cls();
         pi.locate(0,0);
@@ -149,18 +204,9 @@ int main(){
 
     pi.cls();
     pi.locate(0,0);
-    sprintf(message,"Calibrate");
-    pi.print(message,strlen(message));
-    
-    wait_button_press();
-
-    pi.sensor_auto_calibrate();
-
-    pi.cls();
-    pi.locate(0,0);
     sprintf(message,"Rdy");
     pi.print(message,strlen(message));
-    //l
+
 
     setup();
 
