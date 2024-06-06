@@ -34,8 +34,8 @@ AnalogIn sensor_port(p17);
 // ======================= Utilitaires =======================//
 
 #define ON_LINE (sensors[0] > SEUIL_LIGNE_PERDUE || sensors[1] > SEUIL_LIGNE_PERDUE || sensors[2] > SEUIL_LIGNE_PERDUE || sensors[3] > SEUIL_LIGNE_PERDUE || sensors[4] > SEUIL_LIGNE_PERDUE)
-#define LINE_RIGHT (sensors[2] > SEUIL_DETECTION_VIRAGE && sensors[3] > SEUIL_DETECTION_VIRAGE && sensors[4] > SEUIL_DETECTION_VIRAGE)
-#define LINE_LEFT (sensors[0] > SEUIL_DETECTION_VIRAGE && sensors[1] > SEUIL_DETECTION_VIRAGE && sensors[2] > SEUIL_DETECTION_VIRAGE)  
+#define LINE_RIGHT (sensors[2] > SEUIL_DETECTION_VIRAGE && sensors[4] > SEUIL_DETECTION_VIRAGE)
+#define LINE_LEFT (sensors[0] > SEUIL_DETECTION_VIRAGE && sensors[2] > SEUIL_DETECTION_VIRAGE)  
 
 float distance(){
     float t = sensor_port.read();
@@ -137,8 +137,16 @@ void stopped(void){ // robot stoppé par le bouton
 int main(){
     pc.printf("HAL init done, proceeding...\n");
     pi.reset(); 
-    wait_ms(1000);
+    wait_ms(400);
     
+    if (pi.battery() < 4.8){
+        pi.cls();
+        pi.locate(0,0);
+        sprintf(message,"LOW BATT !");
+        pi.print(message,strlen(message));
+        wait_button_press();
+    }
+
     pi.cls();
     pi.locate(0,0);
     sprintf(message,"Calibrate");
@@ -147,14 +155,6 @@ int main(){
     wait_button_press();
 
     pi.sensor_auto_calibrate();
-
-    if (pi.battery() < 4.8){
-        pi.cls();
-        pi.locate(0,0);
-        sprintf(message,"LOW BATT !");
-        pi.print(message,strlen(message));
-        wait_button_press();
-    }
 
     pi.cls();
     pi.locate(0,0);
