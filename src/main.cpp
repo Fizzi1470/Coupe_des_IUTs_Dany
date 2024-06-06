@@ -1,8 +1,10 @@
 // ======================= Parametres =======================//
 
 #define SPEED 0.2
-#define KP 0.3
-#define KD 0.1
+#define KP 0.35
+#define KD 0.25
+
+#define SEUIL_PRIORITE 20 //cm noooormalement
 
 #define SEUIL_LIGNE_PERDUE 300
 #define SEUIL_DETECTION_VIRAGE 500
@@ -85,7 +87,7 @@ void loop(){ // appelé en boucle
 
     old_error = error;
 
-    if(!ON_LINE) consigne = 0;
+    if((!ON_LINE) || LINE_LEFT || LINE_RIGHT) consigne = 0;
 
     pi.left_motor(constrain(SPEED + consigne,0,1));
     pi.right_motor(constrain(SPEED - consigne,0,1));
@@ -118,6 +120,10 @@ void croisement(void){ // croisement de lignes détecté
 
 void fin_de_ligne(void){ // sortie de piste détectée
     u_turn();
+}
+
+void priorite_a_droite(void){
+    
 }
 
 void stopped(void){ // robot stoppé par le bouton 
@@ -162,6 +168,10 @@ int main(){
     while(true){
         pi.calibrated_sensors(sensors);
         line_pos = pi.line_position();
+
+        if(distance() < SEUIL_PRIORITE){
+            priorite_a_droite();
+        }
 
         loop();
         
