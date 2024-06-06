@@ -160,6 +160,7 @@ int main(){
     pi.locate(0,0);
     sprintf(message,"Rdy");
     pi.print(message,strlen(message));
+    //l
 
     setup();
 
