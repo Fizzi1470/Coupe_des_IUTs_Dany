@@ -101,9 +101,9 @@ void loop(){ // appelé en boucle
     pi.locate(0,0);
     sprintf(message,"%.1f %d",fabsf(error),sensors[2]);
     pi.print(message,strlen(message));
-    //pi.locate(0,1);
-    //sprintf(message,"%d %d %d",compteur_ligne_gauche,compteur_croisements,compteur_ligne_droite);
-    //pi.print(message,strlen(message));
+    pi.locate(0,1);
+    sprintf(message,"%d %d %d",compteur_ligne_gauche,compteur_croisements,compteur_ligne_droite);
+    pi.print(message,strlen(message));
 }
 
 void ligne_a_droite(void){ // ligne détectée à droite uniquement
@@ -116,6 +116,10 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if (compteur_croisements >= 2){
+        pi.stop();
+        while(true);
+    }
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
