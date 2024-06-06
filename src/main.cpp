@@ -137,8 +137,16 @@ void stopped(void){ // robot stoppé par le bouton
 int main(){
     pc.printf("HAL init done, proceeding...\n");
     pi.reset(); 
-    wait_ms(1000);
+    wait_ms(400);
     
+    if (pi.battery() < 4.8){
+        pi.cls();
+        pi.locate(0,0);
+        sprintf(message,"LOW BATT !");
+        pi.print(message,strlen(message));
+        wait_button_press();
+    }
+
     pi.cls();
     pi.locate(0,0);
     sprintf(message,"Calibrate");
@@ -147,14 +155,6 @@ int main(){
     wait_button_press();
 
     pi.sensor_auto_calibrate();
-
-    if (pi.battery() < 4.8){
-        pi.cls();
-        pi.locate(0,0);
-        sprintf(message,"LOW BATT !");
-        pi.print(message,strlen(message));
-        wait_button_press();
-    }
 
     pi.cls();
     pi.locate(0,0);
