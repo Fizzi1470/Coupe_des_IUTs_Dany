@@ -27,11 +27,18 @@ float line_pos = 0;
 bool line_left = false, line_right = false, crossing = false, line_detected = false;
 bool lost_line = false;
 
+AnalogIn sensor_port(p17);
+
 // ======================= Utilitaires =======================//
 
 #define ON_LINE (sensors[0] > SEUIL_LIGNE_PERDUE || sensors[1] > SEUIL_LIGNE_PERDUE || sensors[2] > SEUIL_LIGNE_PERDUE || sensors[3] > SEUIL_LIGNE_PERDUE || sensors[4] > SEUIL_LIGNE_PERDUE)
 #define LINE_RIGHT (sensors[2] > SEUIL_DETECTION_VIRAGE && sensors[3] > SEUIL_DETECTION_VIRAGE && sensors[4] > SEUIL_DETECTION_VIRAGE)
 #define LINE_LEFT (sensors[0] > SEUIL_DETECTION_VIRAGE && sensors[1] > SEUIL_DETECTION_VIRAGE && sensors[2] > SEUIL_DETECTION_VIRAGE)  
+
+float distance(){
+    float t = sensor_port.read();
+    return (13.07143 * t * t * t * t - 77.17951 * t * t * t + 162.49768 * t * t - 150.403 * t + 64.30365);
+}
 
 float constrain(float data, float floor, float ceilling){
     if (data > ceilling) return ceilling;
@@ -69,7 +76,7 @@ void setup(){ // appelé une fois au démarrage du programme
 }
 
 void loop(){ // appelé en boucle
-
+// suiveur de ligne 
     float error = line_pos;
 
     float delta = error - old_error;
@@ -83,12 +90,18 @@ void loop(){ // appelé en boucle
     pi.left_motor(constrain(SPEED + consigne,0,1));
     pi.right_motor(constrain(SPEED - consigne,0,1));
 
+// fin suiveur de ligne 
+
+    pi.locate(0,1);
+    sprintf(message,"%.2f",distance());
+    pi.print(message,strlen(message));    
+
     pi.locate(0,0);
     sprintf(message,"%.1f %d",fabsf(error),sensors[2]);
     pi.print(message,strlen(message));
-    pi.locate(0,1);
-    sprintf(message,"%d %d %d",compteur_ligne_gauche,compteur_croisements,compteur_ligne_droite);
-    pi.print(message,strlen(message));
+    //pi.locate(0,1);
+    //sprintf(message,"%d %d %d",compteur_ligne_gauche,compteur_croisements,compteur_ligne_droite);
+    //pi.print(message,strlen(message));
 }
 
 void ligne_a_droite(void){ // ligne détectée à droite uniquement
@@ -128,6 +141,14 @@ int main(){
     wait_button_press();
 
     pi.sensor_auto_calibrate();
+
+    if (pi.battery() < 4.8){
+        pi.cls();
+        pi.locate(0,0);
+        sprintf(message,"LOW BATT !");
+        pi.print(message,strlen(message));
+        wait_button_press();
+    }
 
     pi.cls();
     pi.locate(0,0);

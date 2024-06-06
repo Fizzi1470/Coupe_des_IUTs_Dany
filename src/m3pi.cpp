@@ -158,8 +158,8 @@ float m3pi::pot_voltage(void) {
 
 void m3pi::leds(int val) {
 
-    BusOut _leds(p20,p19,p18,p17,p16,p15,p14,p13);
-    _leds = val;
+    //BusOut _leds(p20,p19,p18,p17,p16,p15,p14,p13);
+    //_leds = val;
 }
 
 
