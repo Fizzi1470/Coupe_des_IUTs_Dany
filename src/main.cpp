@@ -6,6 +6,8 @@
 
 #define SEUIL_PRIORITE 20 //cm noooormalement
 
+#define ATTENTE_APRES_VIRAGE 200
+
 #define SEUIL_LIGNE_PERDUE 300
 #define SEUIL_DETECTION_VIRAGE 500
 
@@ -38,7 +40,7 @@ AnalogIn sensor_port(p17);
 #define LINE_LEFT (sensors[0] > SEUIL_DETECTION_VIRAGE && sensors[2] > SEUIL_DETECTION_VIRAGE)  
 
 float distance(){
-    float t = sensor_port.read();
+    float t = sensor_port.read() * 3.3;
     return (13.07143 * t * t * t * t - 77.17951 * t * t * t + 162.49768 * t * t - 150.403 * t + 64.30365);
 }
 
@@ -55,6 +57,7 @@ void perpandicular_turn(bool dir = 1){ // 1 pour tourner vers la droite, 0 pour 
     pi.right_motor(-coef*0.3);
     wait_ms(210);
     pi.stop();
+    wait_ms(ATTENTE_APRES_VIRAGE);
 }
 void u_turn(bool dir = 1){ // fait faire demi tour 
     perpandicular_turn(dir);
