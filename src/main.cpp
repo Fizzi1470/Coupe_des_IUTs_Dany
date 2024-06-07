@@ -119,10 +119,21 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+
+    if (compteur_croisements == 5) {
+        perpandicular_turn();
+    }
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
+    //u_turn();
+
+    
     u_turn();
+    pi.backward(SPEED);
+    wait_ms(1000);
+    pi.stop();
+    wait_button_press();
 }
 
 void priorite_a_droite(void){
