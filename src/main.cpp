@@ -117,7 +117,7 @@ void ligne_a_droite(void){ // ligne détectée à droite uniquement
 
 void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
     compteur_ligne_gauche++;
-    if(compteur_ligne_gauche >= 6) perpandicular_turn(0);
+    if(compteur_ligne_gauche == 6) perpandicular_turn(0);
 }
 
 void croisement(void){ // croisement de lignes détecté
