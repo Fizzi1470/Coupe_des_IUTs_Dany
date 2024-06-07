@@ -1,6 +1,6 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.2
+#define SPEED 0.3
 #define KP 0.35
 #define KD 0.25
 
@@ -8,7 +8,7 @@
 
 #define ATTENTE_APRES_VIRAGE 200
 
-#define SEUIL_LIGNE_PERDUE 300
+#define SEUIL_LIGNE_PERDUE 250
 #define SEUIL_DETECTION_VIRAGE 500
 
 // ======================= Dépendances =======================//
@@ -115,14 +115,35 @@ void ligne_a_droite(void){ // ligne détectée à droite uniquement
 
 void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
     compteur_ligne_gauche++;
+    if (compteur_ligne_gauche==1)
+    {
+        perpandicular_turn(0);
+    }
 }
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if (compteur_croisements == 1)
+    {
+        perpandicular_turn(0);
+    }
+    if (compteur_croisements == 2)
+    {
+        perpandicular_turn(0);
+    }
+    if (compteur_croisements == 3)
+    {
+        perpandicular_turn(0);
+    }
+
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
     u_turn();
+    pi.backward(0.2);
+    wait_ms(1000);
+    pi.stop();
+    while(1);
 }
 
 void priorite_a_droite(void){
