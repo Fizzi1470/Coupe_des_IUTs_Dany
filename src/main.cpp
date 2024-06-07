@@ -66,6 +66,26 @@ void u_turn(bool dir = 1){ // fait faire demi tour
     wait_ms(200);
 }
 
+// Avancer d'une distance en cm et avec une vitesse en m/s
+void forward_on_distance(float distance, float speed = 0.5)
+{
+    float time = (distance / 100.0) / speed;
+
+    pi.forward(speed);
+    wait_ms(time * 1000);
+    pi.stop();
+}
+
+// Reculer d'une distance en cm et avec une vitesse en m/s
+void backward_on_distance(float distance, float speed = 0.5)
+{
+    float time = (distance / 100.0) / speed;
+
+    pi.backward(speed);
+    wait_ms(time * 1000);
+    pi.stop();
+}
+
 void wait_button_press(){while(BTN);while(!BTN);} // attend un appui sur le bouton de manière bloquante (attention à son utilisation)
 
 // ======================= Fonctions =======================//
@@ -120,20 +140,10 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
 
-    if (compteur_croisements == 5) {
-        perpandicular_turn();
-    }
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
-    //u_turn();
 
-    
-    u_turn();
-    pi.backward(SPEED);
-    wait_ms(1000);
-    pi.stop();
-    wait_button_press();
 }
 
 void priorite_a_droite(void){
