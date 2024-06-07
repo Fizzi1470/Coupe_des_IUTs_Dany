@@ -150,5 +150,6 @@ add_custom_command(TARGET IUT_MBED_LPC1768 PRE_LINK
 
 add_custom_command(TARGET IUT_MBED_LPC1768 POST_BUILD
                    COMMAND ${ELF2BIN} -O ihex $<TARGET_FILE:IUT_MBED_LPC1768> $<TARGET_FILE:IUT_MBED_LPC1768>.hex
+                   COMMAND ${ELF2BIN} -O binary $<TARGET_FILE:IUT_MBED_LPC1768> $<TARGET_FILE:IUT_MBED_LPC1768>.bin
                    COMMAND ${CMAKE_COMMAND} -E echo "-- built: $<TARGET_FILE:IUT_MBED_LPC1768>.hex"
                   )

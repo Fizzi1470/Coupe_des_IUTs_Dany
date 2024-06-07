@@ -2,7 +2,7 @@
 
 #define SPEED 0.2
 #define KP 0.35
-#define KD 0.25
+#define KD 0.2
 
 #define SEUIL_PRIORITE 20 //cm noooormalement
 
@@ -73,6 +73,7 @@ void wait_button_press(){while(BTN);while(!BTN);} // attend un appui sur le bout
 int compteur_ligne_droite = 0;
 int compteur_ligne_gauche = 0;
 int compteur_croisements = 0;
+int compteur_fin = 0;
 
 float old_error = 0;
 
@@ -97,9 +98,9 @@ void loop(){ // appelé en boucle
 
 // fin suiveur de ligne 
 
-    pi.locate(0,1);
-    sprintf(message,"%.2f",distance());
-    pi.print(message,strlen(message));    
+    //pi.locate(0,1);
+    //sprintf(message,"%.2f",distance());
+    //pi.print(message,strlen(message));    
 
     pi.locate(0,0);
     sprintf(message,"%.1f %d",fabsf(error),sensors[2]);
@@ -119,10 +120,16 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if(compteur_croisements == 1) perpandicular_turn(0);
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
+    compteur_fin++;
     u_turn();
+    pi.backward(SPEED);
+    wait_ms(1000);
+    pi.stop();
+    while(true);
 }
 
 void priorite_a_droite(void){
@@ -133,6 +140,7 @@ void stopped(void){ // robot stoppé par le bouton
     compteur_ligne_droite = 0;
     compteur_ligne_gauche = 0;
     compteur_croisements = 0;
+    compteur_fin = 0;
 }
 
 // ======================= Main =======================//
