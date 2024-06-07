@@ -120,10 +120,6 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
-    if (compteur_croisements == 3)
-    {
-        perpandicular_turn(1);
-    }
     if (compteur_croisements == 4)
     {
         perpandicular_turn(1);
@@ -132,15 +128,19 @@ void croisement(void){ // croisement de lignes détecté
     {
         perpandicular_turn(1);
     }
-    if (compteur_croisements == 6)
-    {
-        perpandicular_turn(1);
-    }
     if (compteur_croisements == 7)
     {
         perpandicular_turn(1);
     }
-    if(compteur_croisements == 8)
+    if (compteur_croisements == 8)
+    {
+        perpandicular_turn(1);
+    }
+    if (compteur_croisements == 9)
+    {
+        perpandicular_turn(1);
+    }
+    if(compteur_croisements == 10)
     {
         perpandicular_turn(1);
     }
