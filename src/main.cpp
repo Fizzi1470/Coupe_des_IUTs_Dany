@@ -79,7 +79,7 @@ int compteur_croisements = 0;
 
 float old_error = 0;
 
-float speed = SLOW_SPEED;
+float speed = MED_SPEED;
 
 void setup(){ // appelé une fois au démarrage du programme
     wait_button_press();
@@ -116,32 +116,29 @@ void loop(){ // appelé en boucle
 
 void ligne_a_droite(void){ // ligne détectée à droite uniquement
     compteur_ligne_droite++;
-    if(compteur_ligne_droite == 1){
-        speed = SPEED;
-    }
-    if(compteur_ligne_droite == 2){
-        speed = SLOW_SPEED;
-    }
+    if(compteur_ligne_droite == 1) speed = SLOW_SPEED;
+    if(compteur_ligne_droite == 2) speed = SLOW_SPEED;
+    if(compteur_ligne_droite == 3) speed = SLOW_SPEED;
+    if(compteur_ligne_droite == 4) speed = MED_SPEED;
+    if(compteur_ligne_droite == 5) speed = SPEED;
+    if(compteur_ligne_droite == 6) speed = MED_SPEED;
+    if(compteur_ligne_droite == 8) speed = SPEED;
+    if(compteur_ligne_droite == 9) speed = SLOW_SPEED;
+    if(compteur_ligne_droite == 10) speed = SPEED;
+    if(compteur_ligne_droite == 11) speed = SLOW_SPEED;
 }
 
 void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
     compteur_ligne_gauche++;
-    if(compteur_ligne_gauche == 1){
-        speed = MED_SPEED;
-    }
+
 }
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
-    if(compteur_croisements == 1){
-        speed = SPEED;
-    }
-    if(compteur_croisements == 2){
-        speed = SPEED;
-    }
-    if(compteur_croisements == 4){
-        speed = MED_SPEED;
-    }
+    if(compteur_croisements == 1) speed = SPEED;
+    if(compteur_croisements == 2) speed = MED_SPEED;
+    if(compteur_croisements == 3) speed = SPEED;
+    if(compteur_croisements == 9) speed = MED_SPEED;
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
