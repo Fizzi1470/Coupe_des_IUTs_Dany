@@ -1,8 +1,8 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.2
-#define KP 0.35
-#define KD 0.25
+#define SPEED 0.3
+#define KP 0.45
+#define KD 0.35
 
 #define SEUIL_PRIORITE 20 //cm noooormalement
 
@@ -97,9 +97,9 @@ void loop(){ // appelé en boucle
 
 // fin suiveur de ligne 
 
-    pi.locate(0,1);
-    sprintf(message,"%.2f",distance());
-    pi.print(message,strlen(message));    
+    // pi.locate(0,1);
+    // sprintf(message,"%.2f",distance());
+    // pi.print(message,strlen(message));    
 
     pi.locate(0,0);
     sprintf(message,"%.1f %d",fabsf(error),sensors[2]);
@@ -111,6 +111,11 @@ void loop(){ // appelé en boucle
 
 void ligne_a_droite(void){ // ligne détectée à droite uniquement
     compteur_ligne_droite++;
+    if(compteur_ligne_droite == 6)
+    {
+       perpandicular_turn(1);
+    }
+    
 }
 
 void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
@@ -119,10 +124,35 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if( compteur_croisements == 4)
+    {
+        perpandicular_turn(1);
+    }
+    if( compteur_croisements == 11)
+    {
+        perpandicular_turn(1);
+    }
+    if( compteur_croisements == 12)
+    {
+        perpandicular_turn(1);
+    }
+    if( compteur_croisements == 14)
+    {
+        perpandicular_turn(0);
+    }
+    if( compteur_croisements == 16)
+    {
+        pi.stop();
+        u_turn();
+        pi.backward(0.3);
+        wait_ms(500);
+        pi.stop();
+        while(1);
+    }
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
-    u_turn();
+    
 }
 
 void priorite_a_droite(void){
