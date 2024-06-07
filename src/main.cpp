@@ -1,3 +1,5 @@
+// Challenge 7, Dany
+
 // ======================= Parametres =======================//
 
 #define SPEED 0.2
@@ -115,14 +117,20 @@ void ligne_a_droite(void){ // ligne détectée à droite uniquement
 
 void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
     compteur_ligne_gauche++;
+    if(compteur_ligne_gauche >= 6) perpandicular_turn(0);
 }
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if(compteur_croisements == 7){
+        u_turn();
+        compteur_ligne_gauche = 0;
+    }
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
-    u_turn();
+    pi.stop();
+    while(true);
 }
 
 void priorite_a_droite(void){
