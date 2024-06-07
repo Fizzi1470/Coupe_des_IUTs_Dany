@@ -1,8 +1,8 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.2
-#define KP 0.35
-#define KD 0.25
+#define SPEED 0.55
+#define KP 0.60
+#define KD 0.80
 
 #define SEUIL_PRIORITE 20 //cm noooormalement
 
