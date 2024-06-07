@@ -4,12 +4,14 @@
 #define KP 0.35
 #define KD 0.25
 
-#define SEUIL_PRIORITE 20 //cm noooormalement
+#define SEUIL_PRIORITE 10 //cm noooormalement
 
 #define ATTENTE_APRES_VIRAGE 200
 
 #define SEUIL_LIGNE_PERDUE 300
 #define SEUIL_DETECTION_VIRAGE 500
+
+#define SUIVI_LIGNE 1
 
 // ======================= Dépendances =======================//
 
@@ -32,6 +34,9 @@ bool line_left = false, line_right = false, crossing = false, line_detected = fa
 bool lost_line = false;
 
 AnalogIn sensor_port(p17);
+
+int allumer_capteur_distance = 0; 
+int nombre_evitement = 0;
 
 // ======================= Utilitaires =======================//
 
@@ -102,6 +107,8 @@ void setup(){ // appelé une fois au démarrage du programme
 
 void loop(){ // appelé en boucle
 // suiveur de ligne 
+
+#ifdef SUIVI_LIGNE
     float error = line_pos;
 
     float delta = error - old_error;
@@ -117,20 +124,32 @@ void loop(){ // appelé en boucle
 
 // fin suiveur de ligne 
 
-    pi.locate(0,1);
-    sprintf(message,"%.2f",distance());
-    pi.print(message,strlen(message));    
+    //pi.locate(0,1);
+    //sprintf(message,"%.2f",distance());
+    //pi.print(message,strlen(message));    
 
     pi.locate(0,0);
     sprintf(message,"%.1f %d",fabsf(error),sensors[2]);
     pi.print(message,strlen(message));
     pi.locate(0,1);
-    sprintf(message,"%d %d %d",compteur_ligne_gauche,compteur_croisements,compteur_ligne_droite);
+    sprintf(message,"%d %d %d %d%d",compteur_ligne_gauche,compteur_croisements,compteur_ligne_droite,allumer_capteur_distance,nombre_evitement);
     pi.print(message,strlen(message));
+#endif
+    
 }
 
 void ligne_a_droite(void){ // ligne détectée à droite uniquement
     compteur_ligne_droite++;
+
+    //allumer_capteur_distance++;
+
+    if (compteur_ligne_droite == 1) {
+        allumer_capteur_distance = 1;
+    }
+
+    // if (allumer_capteur_distance == 2) {
+    //     allumer_capteur_distance = 0;
+    // }
 }
 
 void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
@@ -140,14 +159,44 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
 
+    if (compteur_croisements == 4) {
+        allumer_capteur_distance = 1;
+    }
+
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
-
+    pi.stop();
+    u_turn();
+    pi.backward(0.3);
+    wait_ms(500);
+    pi.stop();
+    while (1)
+    {
+        /* code */
+    }
+    
 }
 
 void priorite_a_droite(void){
-    
+    if (nombre_evitement < 2) {
+        perpandicular_turn(1);
+        forward_on_distance(25);
+        perpandicular_turn(0);
+        forward_on_distance(30);
+        perpandicular_turn(0);
+        //forward_on_distance(20);
+        pi.forward(0.3);
+        pi.calibrated_sensors(sensors);
+        while (!ON_LINE)
+        {
+           pi.calibrated_sensors(sensors);
+        }
+        wait_ms(100);
+        perpandicular_turn(1);
+        allumer_capteur_distance = 0;
+        nombre_evitement++;
+    }
 }
 
 void stopped(void){ // robot stoppé par le bouton 
@@ -193,7 +242,10 @@ int main(){
         pi.calibrated_sensors(sensors);
         line_pos = pi.line_position();
 
-        if(distance() < SEUIL_PRIORITE){
+
+        pc.printf("%f", distance());
+
+        if((distance() < SEUIL_PRIORITE) && (allumer_capteur_distance == 1)){
             priorite_a_droite();
         }
 
