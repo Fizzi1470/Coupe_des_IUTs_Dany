@@ -8,7 +8,7 @@
 
 #define ATTENTE_APRES_VIRAGE 200
 
-#define SEUIL_LIGNE_PERDUE 250
+#define SEUIL_LIGNE_PERDUE 200
 #define SEUIL_DETECTION_VIRAGE 500
 
 // ======================= Dépendances =======================//
