@@ -1,6 +1,9 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.2
+#define MED_SPEED 0.25
+#define SLOW_SPEED 0.15
+
+#define SPEED 0.35
 #define KP 0.35
 #define KD 0.25
 
@@ -76,6 +79,8 @@ int compteur_croisements = 0;
 
 float old_error = 0;
 
+float speed = SLOW_SPEED;
+
 void setup(){ // appelé une fois au démarrage du programme
     wait_button_press();
 }
@@ -92,8 +97,8 @@ void loop(){ // appelé en boucle
 
     if((!ON_LINE) || LINE_LEFT || LINE_RIGHT) consigne = 0;
 
-    pi.left_motor(constrain(SPEED + consigne,0,1));
-    pi.right_motor(constrain(SPEED - consigne,0,1));
+    pi.left_motor(constrain(speed + consigne,0,1));
+    pi.right_motor(constrain(speed - consigne,0,1));
 
 // fin suiveur de ligne 
 
@@ -111,18 +116,41 @@ void loop(){ // appelé en boucle
 
 void ligne_a_droite(void){ // ligne détectée à droite uniquement
     compteur_ligne_droite++;
+    if(compteur_ligne_droite == 1){
+        speed = SPEED;
+    }
+    if(compteur_ligne_droite == 2){
+        speed = SLOW_SPEED;
+    }
 }
 
 void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
     compteur_ligne_gauche++;
+    if(compteur_ligne_gauche == 1){
+        speed = MED_SPEED;
+    }
 }
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if(compteur_croisements == 1){
+        speed = SPEED;
+    }
+    if(compteur_croisements == 2){
+        speed = SPEED;
+    }
+    if(compteur_croisements == 4){
+        speed = MED_SPEED;
+    }
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
+    pi.stop();
     u_turn();
+    pi.backward(0.3);
+    wait_ms(500);
+    pi.stop();
+    while(true);
 }
 
 void priorite_a_droite(void){
