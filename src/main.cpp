@@ -1,8 +1,8 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.2
-#define KP 0.35
-#define KD 0.25
+#define SPEED 0.32
+#define KP 0.50
+#define KD 0.70
 
 #define SEUIL_PRIORITE 20 //cm noooormalement
 
@@ -32,6 +32,8 @@ bool line_left = false, line_right = false, crossing = false, line_detected = fa
 bool lost_line = false;
 
 AnalogIn sensor_port(p17);
+
+Timer start_time;
 
 // ======================= Utilitaires =======================//
 
@@ -78,6 +80,8 @@ float old_error = 0;
 
 void setup(){ // appelé une fois au démarrage du programme
     wait_button_press();
+    start_time.start();
+    start_time.reset();
 }
 
 void loop(){ // appelé en boucle
@@ -97,9 +101,9 @@ void loop(){ // appelé en boucle
 
 // fin suiveur de ligne 
 
-    pi.locate(0,1);
-    sprintf(message,"%.2f",distance());
-    pi.print(message,strlen(message));    
+    //pi.locate(0,1);
+    //sprintf(message,"%.2f",distance());
+    //pi.print(message,strlen(message));    
 
     pi.locate(0,0);
     sprintf(message,"%.1f %d",fabsf(error),sensors[2]);
@@ -122,7 +126,13 @@ void croisement(void){ // croisement de lignes détecté
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
+    //pi.stop();
+    //while(start_time.read_ms() < 32000);
     u_turn();
+    pi.backward(0.3);
+    wait_ms(500);
+    pi.stop();
+    while(true);
 }
 
 void priorite_a_droite(void){
