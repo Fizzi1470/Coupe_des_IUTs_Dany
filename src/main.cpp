@@ -122,7 +122,13 @@ void croisement(void){ // croisement de lignes détecté
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
+    // u_turn();
+    pi.stop();
     u_turn();
+    pi.backward(0.2);
+    wait_ms(1000);
+    pi.stop();
+    while(1);
 }
 
 void priorite_a_droite(void){
