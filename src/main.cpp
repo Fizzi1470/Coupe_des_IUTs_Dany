@@ -73,6 +73,7 @@ void wait_button_press(){while(BTN);while(!BTN);} // attend un appui sur le bout
 int compteur_ligne_droite = 0;
 int compteur_ligne_gauche = 0;
 int compteur_croisements = 0;
+int compteur_fin = 0;
 
 float old_error = 0;
 
@@ -111,6 +112,8 @@ void loop(){ // appelé en boucle
 
 void ligne_a_droite(void){ // ligne détectée à droite uniquement
     compteur_ligne_droite++;
+    if(compteur_ligne_droite == 6) perpandicular_turn(1);
+
 }
 
 void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
@@ -119,10 +122,19 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if(compteur_croisements == 4) perpandicular_turn(0);
+    if(compteur_croisements == 5) perpandicular_turn(0);
+    if(compteur_croisements == 7) perpandicular_turn(0);
+    if(compteur_croisements == 9) perpandicular_turn(0);
+    if(compteur_croisements == 10) perpandicular_turn(0);
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
-    u_turn();
+    compteur_fin++;
+    if(compteur_fin == 7){
+        pi.stop();
+        while(true);
+    }
 }
 
 void priorite_a_droite(void){
