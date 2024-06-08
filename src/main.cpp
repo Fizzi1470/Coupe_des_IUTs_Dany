@@ -1,6 +1,6 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.3
+#define SPEED 0.2
 #define KP 0.35
 #define KD 0.25
 
@@ -111,8 +111,6 @@ void loop(){ // appelé en boucle
 
 void ligne_a_droite(void){ // ligne détectée à droite uniquement
     compteur_ligne_droite++;
-    if (compteur_ligne_droite == 5) perpandicular_turn(1);
-
 }
 
 void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
@@ -121,24 +119,10 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
-    if (compteur_croisements == 1) perpandicular_turn(1);
-    if (compteur_croisements == 4) perpandicular_turn(0);
-    if (compteur_croisements == 7) perpandicular_turn(1);
-    if (compteur_croisements == 11) perpandicular_turn(1);
-
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
-    if (compteur_ligne_droite == 9);
-    {
-        pi.stop();
-        wait_ms(100);
-        u_turn();
-        pi.backward(0.2);
-        wait_ms(1000);
-        pi.stop();
-        while(1);
-    }
+    u_turn();
 }
 
 void priorite_a_droite(void){
