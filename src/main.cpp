@@ -122,11 +122,11 @@ void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
     if (compteur_croisements == 12 ) perpandicular_turn(1);
     if (compteur_croisements == 13 ) perpandicular_turn(1);
-    if (compteur_croisements == 19 ) perpandicular_turn(1);
+    if (compteur_croisements == 18 ) perpandicular_turn(1);
+    if (compteur_croisements == 23 ) perpandicular_turn(0);
     if (compteur_croisements == 24 ) perpandicular_turn(0);
     if (compteur_croisements == 25 ) perpandicular_turn(0);
-    if (compteur_croisements == 26 ) perpandicular_turn(0);
-    if (compteur_croisements == 27 ) u_turn();
+    if (compteur_croisements == 26 ) u_turn();
     
 }
 
