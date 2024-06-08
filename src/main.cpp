@@ -1,6 +1,6 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.2
+#define SPEED 0.3
 #define KP 0.35
 #define KD 0.25
 
@@ -73,6 +73,7 @@ void wait_button_press(){while(BTN);while(!BTN);} // attend un appui sur le bout
 int compteur_ligne_droite = 0;
 int compteur_ligne_gauche = 0;
 int compteur_croisements = 0;
+int compteur_fin = 0;
 
 float old_error = 0;
 
@@ -119,10 +120,19 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if(compteur_croisements == 3) perpandicular_turn(0);
+    if(compteur_croisements == 7) perpandicular_turn(1);
+    if(compteur_croisements == 10) perpandicular_turn(1);
+    if(compteur_croisements == 11) perpandicular_turn(1);
+    if(compteur_croisements == 12) perpandicular_turn(1);
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
-    u_turn();
+    compteur_fin++;
+    if(compteur_fin == 7){
+        pi.stop();
+        while(true);
+    }
 }
 
 void priorite_a_droite(void){
