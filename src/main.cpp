@@ -129,7 +129,7 @@ void croisement(void){ // croisement de lignes détecté
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
-    if (compteur_ligne_droite == 9);
+    if (compteur_ligne_droite == 9)
     {
         pi.stop();
         wait_ms(100);
