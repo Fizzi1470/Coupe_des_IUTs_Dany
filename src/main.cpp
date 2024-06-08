@@ -1,8 +1,8 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.2
-#define KP 0.35
-#define KD 0.25
+#define SPEED 0.5
+#define KP 0.6
+#define KD 0.75
 
 #define SEUIL_PRIORITE 20 //cm noooormalement
 
@@ -119,10 +119,16 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if (compteur_croisements == 1) perpandicular_turn(0);
+    if (compteur_croisements == 5) perpandicular_turn(1);
+    if (compteur_croisements == 6) perpandicular_turn(0);
+
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
-    u_turn();
+    wait_ms(350);
+    pi.stop();
+    while(1);
 }
 
 void priorite_a_droite(void){
