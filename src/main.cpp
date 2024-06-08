@@ -118,7 +118,7 @@ void ligne_a_droite(void){ // ligne détectée à droite uniquement
         pi.forward(0.2);
         wait_ms(1000);
         pi.stop();
-        wait_ms(3000);
+        wait_ms(5000);
         pi.forward(0.2);
         wait_ms(1100);
         perpandicular_turn(1);
@@ -130,7 +130,7 @@ void ligne_a_droite(void){ // ligne détectée à droite uniquement
         pi.forward(0.2);
         wait_ms(1000);
         pi.stop();
-        wait_ms(3000);
+        wait_ms(5000);
         pi.forward(0.2);
         wait_ms(1700);
         perpandicular_turn(1);
