@@ -1,6 +1,6 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.50
+#define SPEED 0.48
 #define KP 0.60
 #define KD 0.75
 
@@ -75,6 +75,8 @@ int compteur_ligne_gauche = 0;
 int compteur_croisements = 0;
 int compteur_fin = 0;
 
+int compteur_tkt = 0;
+
 float old_error = 0;
 
 void setup(){ // appelé une fois au démarrage du programme
@@ -121,22 +123,39 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
     if(compteur_croisements == 1) perpandicular_turn(1);
-    if(compteur_croisements == 9) perpandicular_turn(1);
-    if(compteur_croisements == 12) u_turn();
-    if(compteur_croisements == 17) perpandicular_turn(0);
+    if(compteur_croisements == 2) perpandicular_turn(1);
+    if(compteur_croisements == 7) perpandicular_turn(0);
+    if(compteur_croisements == 8) perpandicular_turn(0);
+    if(compteur_croisements == 10) perpandicular_turn(0);
+    if(compteur_croisements == 11) perpandicular_turn(1);
+
+    if(compteur_croisements == 17) perpandicular_turn(1);
+    if(compteur_croisements == 18) perpandicular_turn(1);
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
     compteur_fin++;
-    u_turn();
-    pi.backward(0.3);
-    wait_ms(2000);
-    pi.forward(0.3);
-    pi.calibrated_sensors(sensors);
-    while(!ON_LINE){
-        pi.calibrated_sensors(sensors);
+    if(compteur_fin == 1) u_turn();
+    
+    else {
+        pi.stop();
         wait_ms(200);
-    }    
+        u_turn();
+        pi.backward(0.3);
+        wait_ms(500);
+        pi.forward(0.3);
+        pi.calibrated_sensors(sensors);
+        while(!ON_LINE){
+            pi.calibrated_sensors(sensors);
+            wait_ms(200);
+        }
+    }
+
+    if(compteur_fin == 3) {
+        pi.stop();
+        while(true);
+    }
+    
 }
 
 void priorite_a_droite(void){
