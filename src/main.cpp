@@ -1,6 +1,6 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.2
+#define SPEED 0.3
 #define KP 0.35
 #define KD 0.25
 
