@@ -73,6 +73,7 @@ void wait_button_press(){while(BTN);while(!BTN);} // attend un appui sur le bout
 int compteur_ligne_droite = 0;
 int compteur_ligne_gauche = 0;
 int compteur_croisements = 0;
+int compteur_fin = 0;
 
 float old_error = 0;
 
@@ -97,10 +98,6 @@ void loop(){ // appelé en boucle
 
 // fin suiveur de ligne 
 
-    pi.locate(0,1);
-    sprintf(message,"%.2f",distance());
-    pi.print(message,strlen(message));    
-
     pi.locate(0,0);
     sprintf(message,"%.1f %d",fabsf(error),sensors[2]);
     pi.print(message,strlen(message));
@@ -119,10 +116,25 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if(compteur_croisements == 4) perpandicular_turn(0);
+    if(compteur_croisements == 7) perpandicular_turn(1);
+    if(compteur_croisements == 9) perpandicular_turn(1);
+    if(compteur_croisements == 10) perpandicular_turn(1);
+    if(compteur_croisements == 11) perpandicular_turn(1);
+    if(compteur_croisements == 12) perpandicular_turn(0);
+    if(compteur_croisements == 13) perpandicular_turn(0);
+    if(compteur_croisements == 14) perpandicular_turn(0);
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
-    u_turn();
+    compteur_fin++;
+    if(compteur_fin == 7){
+        u_turn();
+        pi.backward(0.3);
+        wait_ms(500);
+        pi.stop();
+        while(true);
+    }
 }
 
 void priorite_a_droite(void){
