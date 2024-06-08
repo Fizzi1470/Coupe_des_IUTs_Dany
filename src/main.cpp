@@ -1,6 +1,6 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.2
+#define SPEED 0.3
 #define KP 0.35
 #define KD 0.25
 
@@ -123,7 +123,7 @@ void croisement(void){ // croisement de lignes détecté
     if(compteur_croisements == 11) perpandicular_turn(1);
     if(compteur_croisements == 12) perpandicular_turn(0);
     if(compteur_croisements == 13) perpandicular_turn(0);
-    if(compteur_croisements == 14) perpandicular_turn(0);
+    if(compteur_croisements == 14) perpandicular_turn(1);
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
