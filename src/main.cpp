@@ -1,8 +1,8 @@
 // ======================= Parametres =======================//
 
-#define SPEED 0.2
-#define KP 0.35
-#define KD 0.25
+#define SPEED 0.5
+#define KP 0.6
+#define KD 0.75
 
 #define SEUIL_PRIORITE 20 //cm noooormalement
 
@@ -73,6 +73,7 @@ void wait_button_press(){while(BTN);while(!BTN);} // attend un appui sur le bout
 int compteur_ligne_droite = 0;
 int compteur_ligne_gauche = 0;
 int compteur_croisements = 0;
+int compteur_fin = 0;
 
 float old_error = 0;
 
@@ -119,10 +120,23 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
+    if(compteur_croisements == 1) perpandicular_turn(1);
+    if(compteur_croisements == 9) perpandicular_turn(1);
+    if(compteur_croisements == 12) u_turn();
+    if(compteur_croisements == 17) perpandicular_turn(0);
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
+    compteur_fin++;
     u_turn();
+    pi.backward(0.3);
+    wait_ms(2000);
+    pi.forward(0.3);
+    pi.calibrated_sensors(sensors);
+    while(!ON_LINE){
+        pi.calibrated_sensors(sensors);
+        wait_ms(200);
+    }    
 }
 
 void priorite_a_droite(void){
