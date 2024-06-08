@@ -120,11 +120,11 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
-    if(compteur_croisements == 3) perpandicular_turn(0);
-    if(compteur_croisements == 7) perpandicular_turn(1);
-    if(compteur_croisements == 10) perpandicular_turn(1);
+    if(compteur_croisements == 4) perpandicular_turn(0);
+    if(compteur_croisements == 8) perpandicular_turn(1);
     if(compteur_croisements == 11) perpandicular_turn(1);
     if(compteur_croisements == 12) perpandicular_turn(1);
+    if(compteur_croisements == 13) perpandicular_turn(1);
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
