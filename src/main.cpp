@@ -73,7 +73,7 @@ void wait_button_press(){while(BTN);while(!BTN);} // attend un appui sur le bout
 int compteur_ligne_droite = 0;
 int compteur_ligne_gauche = 0;
 int compteur_croisements = 0;
-int compteur_fin == 0;
+int compteur_fin = 0;
 
 float old_error = 0;
 
@@ -132,6 +132,7 @@ void fin_de_ligne(void){ // sortie de piste détectée
         pi.backward(0.3);
         wait_ms(500);
         pi.stop();
+        while(true);
     }
 }
 
