@@ -123,6 +123,7 @@ void ligne_a_gauche(void){ // ligne détectée à gauche uniquement
 void croisement(void){ // croisement de lignes détecté
     compteur_croisements++;
     if(compteur_croisements == 1) perpandicular_turn(1);
+<<<<<<< Updated upstream
     if(compteur_croisements == 2) perpandicular_turn(1);
     if(compteur_croisements == 7) perpandicular_turn(0);
     if(compteur_croisements == 8) perpandicular_turn(0);
@@ -131,6 +132,11 @@ void croisement(void){ // croisement de lignes détecté
 
     if(compteur_croisements == 17) perpandicular_turn(1);
     if(compteur_croisements == 18) perpandicular_turn(1);
+=======
+    if(compteur_croisements == 8) perpandicular_turn(1);
+    if(compteur_croisements == 11) u_turn();
+    if(compteur_croisements == 16) perpandicular_turn(0);
+>>>>>>> Stashed changes
 }
 
 void fin_de_ligne(void){ // sortie de piste détectée
